@@ -27,20 +27,20 @@ Output:
 Initial memory usage: 1.36 MB
 Final memory usage: 0.13 MB
 Memory savings: 1.23 MB
-| COLUMN NAME   |         | OLD D-TYPE |  | NEW D-TYPE |
-| :------------ | :------ | :--------- |
-| ID            | object  | category   |
-| YEAR          | int64   | int16      |
-| LOCATION      | object  | category   |
-| PRODUCT       | object  | category   |
-| CUSTOMER      | object  | category   |
-| SAMPLE_DATE   | object  | category   |
-| MOISTURE      | float64 | float16    |
-| PLANTING_DATE | object  | category   |
-| LATITUDE      | float64 | float16    |
-| LONGITUDE     | float64 | float16    |
-| ENV_TYPE      | object  | category   |
-| GDU           | float64 | float16    |
+| COLUMN NAME   | OLD D-TYPE | NEW D-TYPE |
+| :------------ | :--------- | :--------- |
+| ID            | object     | category   |
+| YEAR          | int64      | int16      |
+| LOCATION      | object     | category   |
+| PRODUCT       | object     | category   |
+| CUSTOMER      | object     | category   |
+| SAMPLE_DATE   | object     | category   |
+| MOISTURE      | float64    | float16    |
+| PLANTING_DATE | object     | category   |
+| LATITUDE      | float64    | float16    |
+| LONGITUDE     | float64    | float16    |
+| ENV_TYPE      | object     | category   |
+| GDU           | float64    | float16    |
 ```
 
 ## Installation
