@@ -15,13 +15,13 @@ The script uses the argparse library to parse command line arguments.
 You can run the script from the command line with the following command:
 
 ```bash
-python __main__.py -file <path_to_your_file> -sep <csv_separator> -o <output_file_name>
+python panda-slimmer -file <path_to_your_file> -sep <csv_separator> -o <output_file_name>
 ```
 
 ## Example
 
 ```bash
-python __main__.py -file "data.csv" -separator ";" -o "typemap.json"
+python panda-slimmer -file "data.csv" -separator ";" -o "typemap.json"
 ```
 
 Output:
