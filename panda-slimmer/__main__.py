@@ -1,9 +1,13 @@
+import json
 import argparse
+import warnings
 import pandas as pd
 import numpy as np
 
+warnings.filterwarnings("ignore")
 
-def read_data(filepath, separator=","):
+
+def read_data(filepath: str, separator=","):
     """
     Reads data from a CSV or XLSX file into a DataFrame.
 
@@ -22,7 +26,7 @@ def read_data(filepath, separator=","):
         raise ValueError("File must be a CSV or Excel file.")
 
 
-def convert_dtypes(df):
+def convert_dtypes(df: pd.DataFrame):
     """
     Converts DataFrame columns to more memory-efficient dtypes.
 
@@ -45,7 +49,7 @@ def convert_dtypes(df):
     return df
 
 
-def create_cli_table(df, old_dtypes):
+def create_cli_table(df: pd.DataFrame, old_dtypes):
     """
     Creates a CLI table showing column name, old dtype, and new dtype.
 
@@ -62,12 +66,27 @@ def create_cli_table(df, old_dtypes):
     for column, old_dtype, new_dtype in zip(df.columns, old_dtypes, df.dtypes):
         rows.append([column, old_dtype, new_dtype])
 
-    cli_table = pd.DataFrame(rows, columns=["COLUMN NAME |", "OLD D-TYPE |", "NEW D-TYPE"])
+    cli_table = pd.DataFrame(
+        rows, columns=["COLUMN NAME |", "OLD D-TYPE |", "NEW D-TYPE"]
+    )
 
     return cli_table
 
 
-def optimize_dataframe(filepath, separator=","):
+def save_dtypes(df: pd.DataFrame, output_path="dtypes.json"):
+    """
+    Saves the dtypes of a DataFrame to a JSON file.
+
+    Args:
+        df (DataFrame): The DataFrame to save the dtypes of.
+        output_path (str): The path to save the JSON file to.
+    """
+    dtypes = df.dtypes.astype(str).to_dict()
+    with open(output_path, "w") as f:
+        json.dump(dtypes, f)
+
+
+def optimize_dataframe(filepath: str, separator=","):
     """
     Optimizes a DataFrame by converting columns to more memory-efficient dtypes.
 
@@ -91,25 +110,48 @@ def optimize_dataframe(filepath, separator=","):
 
     cli_table = create_cli_table(df, old_dtypes)
 
-    return initial_memory, final_memory, memory_savings, cli_table
+    return df, initial_memory, final_memory, memory_savings, cli_table
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="""Optimizes a DataFrame by converting columns to more memory-efficient dtypes."""
+        description="""
+        CLI tool to measure the optimization of memory in DataFrame by converting columns to more memory-efficient data types, 
+        then output a json file with the data types mapping.
+
+        ╭─ Example ───────────────────────────────────────────────────────────╮
+        | $ python panda-slimmer -file "data.csv" -sep "," -o "dtypes.json"   |
+        ╰─────────────────────────────────────────────────────────────────────╯
+        
+        Developed by: Jose Henrique Roveda
+        """,
+        formatter_class=argparse.RawTextHelpFormatter,
     )
-    parser.add_argument("-filename", type=str, help=">> Path to the file.")
+    parser.add_argument("-file", type=str, help=">> Path to the file (CSV or XLSX).")
     parser.add_argument(
-        "-separator", type=str, default=",", help=" >> (Optional) CSV separator. Default is ','."
+        "-sep",
+        type=str,
+        default=",",
+        help=" >> (Optional) CSV separator. Default is ','.",
+    )
+    parser.add_argument(
+        "-o",
+        type=str,
+        default=None,
+        help=" >> (Optional) Output path to save the dtypes of the optimized DataFrame.",
     )
 
     args = parser.parse_args()
 
-    initial_memory, final_memory, memory_savings, cli_table = optimize_dataframe(
-        args.filename, args.separator
+    df, initial_memory, final_memory, memory_savings, cli_table = optimize_dataframe(
+        args.file, args.sep
     )
 
     print(f"Initial memory usage: {initial_memory:.2f} MB")
     print(f"Final memory usage: {final_memory:.2f} MB")
     print(f"Memory savings: {memory_savings:.2f} MB")
     print(cli_table.to_markdown(index=False))
+
+    if args.o:
+        save_dtypes(df, args.o)
+        print(f"Data types mapping saved to {args.o}")

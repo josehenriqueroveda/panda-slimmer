@@ -1,24 +1,27 @@
 # Panda Slimmer
-CLI tool to measure the optimization of memory in DataFrame by converting columns to more memory-efficient data types.
+CLI tool to measure the optimization of memory in DataFrame by converting columns to more memory-efficient data types, then output a json file with the data types mapping.
 
 <img src="imgs/panda-slimmer-cover.jfif" alt="Panda Slimmer" width="400px"/>
 
 ## Description
 
-The script uses the argparse library to parse command line arguments. The `-filename` argument is the path to your file. The `-separator` argument is the CSV separator, which defaults to ','.
+The script uses the argparse library to parse command line arguments.
+- `-file` argument is the path to your file (CSV or XLSX).
+- `-sep` argument is the CSV separator, which defaults to `,`.
+- `-o` argument is the output file name, which defaults to `dtypes.json`.
 
 ## Usage
 
 You can run the script from the command line with the following command:
 
 ```bash
-python __main__.py -filename <path_to_your_file> -separator <csv_separator>
+python __main__.py -file <path_to_your_file> -sep <csv_separator> -o <output_file_name>
 ```
 
 ## Example
 
 ```bash
-python __main__.py -filename data.csv -separator ','
+python __main__.py -file "data.csv" -separator ";" -o "typemap.json"
 ```
 
 Output:
@@ -41,6 +44,8 @@ Memory savings: 1.23 MB
 | LONGITUDE     | float64    | float16    |
 | ENV_TYPE      | object     | category   |
 | GDU           | float64    | float16    |
+
+Data types mapping saved to 'typemap.json'
 ```
 
 ## Installation
